@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="apache-commons">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/apache-commons.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/java-json.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/mysql-connector-java-5.1.44-bin.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/Downloads/java-json.jar!/" />
+    </SOURCES>
+  </library>
+</component>

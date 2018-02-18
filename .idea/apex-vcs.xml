@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ApexVcsIndex">
+    <index-move-record>
+      <option name="firstPath" value="/src/Features/Weightable.java" />
+      <option name="path" value="/src/features/Weightable.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/src/data/Issue.java" />
+      <option name="path" value="/src/features/Issue.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/src/Features/Title.java" />
+      <option name="path" value="/src/features/Title.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/src/Features/AuthorAssociation.java" />
+      <option name="path" value="/src/features/AuthorAssociation.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/src/data/Assignee.java" />
+      <option name="path" value="/src/features/Assignee.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/src/data/Label.java" />
+      <option name="path" value="/src/features/Label.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/src/Features/Comment.java" />
+      <option name="path" value="/src/features/Comment.java" />
+    </index-move-record>
+    <index-move-record>
+      <option name="firstPath" value="/src/data/Test.java" />
+      <option name="path" value="/src/features/Test.java" />
+    </index-move-record>
+  </component>
+</project>
