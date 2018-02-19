@@ -1,5 +1,6 @@
 package features;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,7 @@ public class Issue implements Weightable{
         this.created_at = Calendar.getInstance();
         this.created_at.set(year, month, days);
         this.body = body;
+        this.comments = comments;
     }
 
     public Calendar getCreated_at() {

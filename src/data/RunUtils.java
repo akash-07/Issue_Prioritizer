@@ -16,35 +16,36 @@ import java.util.*;
 /**
  * Created by @kash on 2/18/2018.
  */
-public class Run {
-    static void intialize() {
-        Scanner sc = new Scanner(System.in);
-        String url = "";  //sc.nextLine();
-        url = "https://api.github.com/repos/tensorflow/tensorflow/issues";
+public class RunUtils {
+    static void intialize(String url) {
+        System.out.println("---------------Initializing----------------");
+        //url = "https://api.github.com/repos/tensorflow/tensorflow/issues";
+        //url = "https://api.github.com/repos/akash-07/Issue_Prioritizer/issues";
         Map<String, String> params = new HashMap<String, String>();
         params.put("per_page", "100");
         params.put("access_token","26e3f7340239e28acf3a2a1b79736f6f5d81ee9a");
         try {
             String url1;
             //Creating a jdbc connection
-            Class.forName("com.mysql.jdbc.Driver");
-            String user_name = "root";
-            String password = "SKY15b007";
-            Connection db_conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/issues", user_name, password);
-
+            Connection db_conn = DatabaseUtils.getDatabaseConnection();
             Statement st = db_conn.createStatement();
 
             //List of issues
             List<Issue> issues = new ArrayList<>();
+
+            //get max pages via a function
+            int max_pages = 3;
+
             //looping through pages
-            for(int page = 1; page < 3; page++)    {
+            for(int page = 1; page < max_pages; page++)    {
                 System.out.println("Page No. [" + page + "]");
                 params.remove("page");
                 params.put("page", String.valueOf(page));
                 url1 = ScrapeUtils.addParams(url, params);
                 HttpURLConnection conn = ScrapeUtils.getConn(url1);
+                System.out.println(url1);
                 JSONArray jarr = ScrapeUtils.getJSONArray(conn);
-                for(int i = 0; i < jarr.length() - 80; i++)  {
+                for(int i = 0; i < jarr.length(); i++)  {
                     JSONObject obj = jarr.getJSONObject(i);
 
                     //id of issue
@@ -88,30 +89,36 @@ public class Run {
                 }
             }
 
-            //Adding to database
-
-            for(Issue issue: issues)    {
-                System.out.println("Adding issue: [" + issue.getId() + "]");
-                String query = "insert into issue (id, number, title, body, assignees, created_at, author_assoc)" +
-                        " values(" + issue.getId() + "," + issue.getNumber() + ",'" +
-                        issue.getTitle().toString() + "','" + issue.getBody() + "'," + issue.getAssignees().size() +
-                        ",'" + issue.getCreated_at().getTimeInMillis() + "','" + issue.getAuthor_assoc().toString() + "')";
-                try{
-                    st.executeUpdate(query);
-                }
-                catch(Exception e){
-                    System.out.println("EXCEPTION:" + e.getMessage());
-                    System.out.println("Dropping issue: [" + issue.getNumber() + "]");
-                }
-                finally {
-                    continue;
-                }
-            }
+            DatabaseUtils.addIssues(db_conn, issues);
             db_conn.close();
         }
         catch (Exception e) {
             e.printStackTrace();
             System.out.println("EXCEPTION: " + e.getMessage());
+        }
+    }
+
+    static void refresh(String url, String since)   {
+        System.out.println("-------------Refresing-------------");
+        List<Issue> updated_open_issues = ScrapeUtils.regetOpenIssues(url, since);
+        List<Issue> updated_closed_issues = ScrapeUtils.regetClosedIssues(url, since);
+        try{
+            Connection db_conn = DatabaseUtils.getDatabaseConnection();
+            List<Long> issue_ids = new ArrayList<>();
+            for(Issue issue: updated_closed_issues) {
+                issue_ids.add(issue.getId());
+            }
+            DatabaseUtils.dropIssues(db_conn, issue_ids);
+            issue_ids = new ArrayList<>();
+            for(Issue issue: updated_open_issues) {
+                issue_ids.add(issue.getId());
+            }
+            DatabaseUtils.dropIssues(db_conn, issue_ids);
+            DatabaseUtils.addIssues(db_conn, updated_open_issues);
+        }
+        catch (Exception e) {
+            System.out.print("METHOD refresh(): ");
+            System.out.println(e.getMessage());
         }
     }
 }
