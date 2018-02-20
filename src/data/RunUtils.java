@@ -17,7 +17,7 @@ import java.util.*;
  * Created by @kash on 2/18/2018.
  */
 public class RunUtils {
-    static void intialize(String url) {
+    public static void intialize(String url) {
         System.out.println("---------------Initializing----------------");
         //url = "https://api.github.com/repos/tensorflow/tensorflow/issues";
         //url = "https://api.github.com/repos/akash-07/Issue_Prioritizer/issues";
@@ -98,7 +98,7 @@ public class RunUtils {
         }
     }
 
-    static void refresh(String url, String since)   {
+    public static void refresh(String url, String since)   {
         System.out.println("-------------Refresing-------------");
         List<Issue> updated_open_issues = ScrapeUtils.regetOpenIssues(url, since);
         List<Issue> updated_closed_issues = ScrapeUtils.regetClosedIssues(url, since);

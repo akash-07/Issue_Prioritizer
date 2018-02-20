@@ -1,17 +1,19 @@
 package data;
 
+import features.Assignee;
 import features.Comment;
 import features.Issue;
 import features.Label;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by @kash on 2/19/2018.
  */
 public class DatabaseUtils {
-    static Connection getDatabaseConnection() throws ClassNotFoundException, SQLException {
+    public static Connection getDatabaseConnection() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.jdbc.Driver");
         String user_name = "root";
         String password = "SKY15b007";
@@ -20,7 +22,7 @@ public class DatabaseUtils {
         return conn;
     }
 
-    static void dropIssues(Connection conn, List<Long> issue_ids) throws SQLException {
+    public static void dropIssues(Connection conn, List<Long> issue_ids) throws SQLException {
         String query;
         Statement st = conn.createStatement();
         System.out.println("== Running drop issues ==");
@@ -35,7 +37,7 @@ public class DatabaseUtils {
         }
     }
 
-    static void addIssues(Connection conn, List<Issue> issues) throws SQLException {
+    public static void addIssues(Connection conn, List<Issue> issues) throws SQLException {
         Statement st = conn.createStatement();
         System.out.println("== Running add issues ==");
         for(Issue issue: issues)    {
@@ -93,5 +95,50 @@ public class DatabaseUtils {
                 continue;
             }
         }
+    }
+
+    public static List<Issue> getIssues(Connection conn) throws SQLException{
+        List<Issue> issues = new ArrayList<>();
+        Statement st = conn.createStatement();
+        String query = "select * from issue";
+        ResultSet res = st.executeQuery(query);
+        while(res.next())   {
+            String title = res.getString("title");
+            String body = res.getString("body");
+            Long number = res.getLong("number");
+            Long id = res.getLong("id");
+            String created_at = res.getString("created_at");
+            String author_assoc = res.getString("author_assoc");
+            int num_assignees = res.getInt("assignees");
+            List<Assignee> assignees = new ArrayList<>();
+            for(int i = 0; i < num_assignees; i++)
+                assignees.add(new Assignee());
+
+            Statement st1 = conn.createStatement();
+            query = "select * from comment where issue_id = " + id;
+            ResultSet res1 = st1.executeQuery(query);
+            List<Comment> comments = new ArrayList<>();
+            while(res1.next())   {
+                Long comment_id = res1.getLong("id");
+                String author_assoc_comment = res1.getString("author_assoc");
+                String created_at_comment = res1.getString("created_at");
+                String body_comment = res1.getString("body");
+                Comment comment = new Comment(created_at, author_assoc_comment, id, comment_id, body_comment);
+                comments.add(comment);
+            }
+
+            query = "select * from labels where issue_id = " + id;
+            ResultSet res2 = st1.executeQuery(query);
+            List<Label> labels = new ArrayList<>();
+            while(res2.next())  {
+                String name = res2.getString("name");
+                Long id_label = res2.getLong("id");
+                Label label = new Label(name, id_label, id);
+                labels.add(label);
+            }
+            Issue issue = new Issue(id, number, created_at, title, comments, assignees,labels,author_assoc,body);
+            issues.add(issue);
+        }
+        return issues;
     }
 }
