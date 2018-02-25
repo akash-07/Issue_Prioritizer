@@ -136,6 +136,8 @@ public class ScrapeUtils {
                 params.put("since", since);
 
                 url1 = ScrapeUtils.addParams(url, params);
+                System.out.println("Reget Issues URL: ");
+                System.out.println(url1);
                 HttpURLConnection conn = ScrapeUtils.getConn(url1);
                 JSONArray jarr = ScrapeUtils.getJSONArray(conn);
 

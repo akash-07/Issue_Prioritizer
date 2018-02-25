@@ -12,15 +12,17 @@ import java.util.Scanner;
  */
 public class TestRun {
     public static void main(String[] args) {
-        /*
+
         String url = "https://api.github.com/repos/akash-07/Issue_Prioritizer/issues";
+        //RunUtils.intialize(url);
+        /*
         url = "https://api.github.com/repos/tensorflow/tensorflow/issues";
-        RunUtils.intialize(url);
         Scanner sc = new Scanner(System.in);
         System.out.println("Waiting for user input...");
         sc.nextLine();
         RunUtils.refresh(url, "past10min");
         */
+        System.out.println("Printing issues from database:");
         try {
             Connection db_conn = DatabaseUtils.getDatabaseConnection();
             List<Issue> issueList = DatabaseUtils.getIssues(db_conn);
@@ -35,8 +37,8 @@ public class TestRun {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                String url = "https://api.github.com/repos/tensorflow/tensorflow/issues";
-                new gui.gui();
+                //String url = "https://api.github.com/repos/tensorflow/tensorflow/issues";
+                new gui.gui(url);
             }
         });
     }

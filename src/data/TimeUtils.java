@@ -14,6 +14,8 @@ public class TimeUtils {
             return 60*60*sec;
         else if((since.equals("pastday")))
             return 24*60*60*sec;
+        else if(since.equals("current"))
+            return 0;
         else
             throw new Error("incorrect string for getMillis: " + since);
     }
