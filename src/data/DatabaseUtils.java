@@ -6,8 +6,11 @@ import features.Issue;
 import features.Label;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by @kash on 2/19/2018.
@@ -107,7 +110,12 @@ public class DatabaseUtils {
             String body = res.getString("body");
             Long number = res.getLong("number");
             Long id = res.getLong("id");
+
             String created_at = res.getString("created_at");
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            format.setTimeZone(TimeZone.getTimeZone("GMT"));
+            created_at = format.format(new Date(Long.valueOf(created_at)));
+
             String author_assoc = res.getString("author_assoc");
             int num_assignees = res.getInt("assignees");
             List<Assignee> assignees = new ArrayList<>();
@@ -122,8 +130,11 @@ public class DatabaseUtils {
                 Long comment_id = res1.getLong("id");
                 String author_assoc_comment = res1.getString("author_assoc");
                 String created_at_comment = res1.getString("created_at");
+                format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                format.setTimeZone(TimeZone.getTimeZone("GMT"));
+                created_at_comment = format.format(new Date(Long.valueOf(created_at_comment)));
                 String body_comment = res1.getString("body");
-                Comment comment = new Comment(created_at, author_assoc_comment, id, comment_id, body_comment);
+                Comment comment = new Comment(created_at_comment, author_assoc_comment, id, comment_id, body_comment);
                 comments.add(comment);
             }
 

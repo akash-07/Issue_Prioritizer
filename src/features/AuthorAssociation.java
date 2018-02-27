@@ -1,5 +1,7 @@
 package features;
 
+import analyzer.Config;
+
 /**
  * Created by @kash on 2/18/2018.
  */
@@ -14,14 +16,15 @@ public class AuthorAssociation implements Weightable{
     public double getWeight() {
         double weight = 0;
         if(author_assoc.equals("NONE"))
-            weight = 1;
+            weight = 0;
         else if(author_assoc.equals("CONTRIBUTOR"))
+            weight = 1;
+        else if(author_assoc.equals("MEMBER") || author_assoc.equals("OWNER"))
             weight = 1.5;
-        else if(author_assoc.equals("MEMBER"))
-            weight = 2;
         else
             throw new Error("author association undentified.");
-        //Unreachable statement
+        int base = Config.AUTHOR_ASSOC_BASE;
+        //weight *= Math.log10(2);
         return weight;
     }
 

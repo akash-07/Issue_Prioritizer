@@ -48,9 +48,10 @@ public class Comment implements Weightable{
     @Override
     public double getWeight() {
          Calendar today = Calendar.getInstance();
-         long diff = today.getTimeInMillis() - created_at.getTimeInMillis();
-         long days = TimeUnit.MILLISECONDS.toDays(diff);
-         double weight = author.getWeight() + 1/Math.log(days + 1);
+         long days = today.get(Calendar.DAY_OF_MONTH) - created_at.get(Calendar.DAY_OF_MONTH);
+         if(days == 0)
+             days += 1;
+         double weight = (0.5 * author.getWeight() + 1)/ Math.log(days + 1);
          return weight;
     }
 }

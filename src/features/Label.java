@@ -1,5 +1,7 @@
 package features;
 
+import analyzer.Config;
+
 /**
  * Created by @kash on 2/18/2018.
  */
@@ -28,6 +30,9 @@ public class Label implements Weightable{
 
     @Override
     public double getWeight() {
-        return 1;
+        int base = Config.LABEL_BASE;
+        double weight = 1d;
+        //weight *= Math.log10(2);
+        return weight;
     }
 }

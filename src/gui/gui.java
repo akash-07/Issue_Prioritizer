@@ -1,5 +1,6 @@
 package gui;
 
+import analyzer.PriorityUtils;
 import data.DatabaseUtils;
 import data.RunUtils;
 import features.Issue;
@@ -31,7 +32,7 @@ public class gui {
         jFrame.add(jTabbedPane);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setVisible(true);
-        jFrame.setSize(500,400);
+        jFrame.setSize(600,400);
     }
 }
 
@@ -65,14 +66,12 @@ class DisplayIssues extends Panel{
         try{
             db_conn = DatabaseUtils.getDatabaseConnection();
             java.util.List<Issue> issues = DatabaseUtils.getIssues(db_conn);
-            issue_titles = GUIUtils.getIssuesForDisplay(issues);
-            data = GUIUtils.getIssuesForJTable(issues);
+            data = GUIUtils.getIssuesForJTable(PriorityUtils.getSortedIssues(issues));
             headers = GUIUtils.getHeadersForJTable();
         }
         catch(Exception e){
             System.out.println(e.getMessage());
             e.printStackTrace();
-            issue_titles.add("ERROR: " + e.getMessage());
             data = new String[1][1];
             data[0][0] = e.getMessage();
             headers = new String[1];
@@ -128,7 +127,7 @@ class DisplayIssues extends Panel{
             db_conn = DatabaseUtils.getDatabaseConnection();
             java.util.List<Issue> issues = DatabaseUtils.getIssues(db_conn);
             issue_titles = GUIUtils.getIssuesForDisplay(issues);
-            data = GUIUtils.getIssuesForJTable(issues);
+            data = GUIUtils.getIssuesForJTable(PriorityUtils.getSortedIssues(issues));
             headers = GUIUtils.getHeadersForJTable();
         }
         catch(Exception e){
