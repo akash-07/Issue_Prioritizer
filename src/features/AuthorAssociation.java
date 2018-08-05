@@ -22,7 +22,8 @@ public class AuthorAssociation implements Weightable{
         else if(author_assoc.equals("MEMBER") || author_assoc.equals("OWNER"))
             weight = 1.5;
         else
-            throw new Error("author association undentified.");
+            weight = 0;
+            //throw new Error("author association undentified.");
         int base = Config.AUTHOR_ASSOC_BASE;
         //weight *= Math.log10(2);
         return weight;
